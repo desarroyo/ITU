@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TransparenciaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CatalogoTransparencia">
+          <Key>
+            <PropertyRef Name="CT_NodoId" />
+          </Key>
+          <Property Name="CT_NodoId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CT_NodoPadreId" Type="uniqueidentifier" />
+          <Property Name="CT_Descripcion" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="CT_Texto" Type="ntext" />
+          <Property Name="CT_CMTR_TipoRangoId" Type="uniqueidentifier" />
+          <Property Name="CT_Rango" Type="int" />
+          <Property Name="CT_Activo" Type="bit" Nullable="false" />
+          <Property Name="CT_Orden" Type="int" Nullable="false" />
+          <Property Name="CT_FechaUltimaModifacion" Type="datetime2" Precision="7" />
+          <Property Name="CT_USU_ModificaPorId" Type="uniqueidentifier" />
+          <Property Name="CT_Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CatalogoTransparenciaReportes">
+          <Key>
+            <PropertyRef Name="CTR_ReporteId" />
+          </Key>
+          <Property Name="CTR_ReporteId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CTR_MR_MapeoId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CTR_NombreArchivo" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="CTR_DescripcionArchivo" Type="nvarchar" MaxLength="255" />
+          <Property Name="CTR_FechaInicio" Type="datetime2" Precision="7" />
+          <Property Name="CTR_FechaFin" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CTR_Visible" Type="bit" Nullable="false" />
+          <Property Name="CTR_Borrado" Type="bit" Nullable="false" />
+          <Property Name="CTR_FechaRegistro" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CTR_USU_SubidoPorId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CTR_FechaUltimaModificacion" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CTR_USU_ModificadoPorId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CTR_Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ControlesMaestrosTiposRangos">
+          <Key>
+            <PropertyRef Name="CMTR_TipoRangoId" />
+          </Key>
+          <Property Name="CMTR_TipoRangoId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CMTR_TipoRango" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="CMTR_Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MapeosReportes">
+          <Key>
+            <PropertyRef Name="MR_MapeoId" />
+          </Key>
+          <Property Name="MR_MapeoId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="MR_RutaFisicaReporte" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="MR_CT_NodoId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="MR_Acronimo" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="MR_Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="USU_UsuarioId" />
+          </Key>
+          <Property Name="USU_UsuarioId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="USU_NombreUsuario" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="USU_CorreoElectronico" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="USU_Contrasenia" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="USU_Activo" Type="bit" Nullable="false" />
+          <Property Name="USU_RegistradoPor" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="USU_FechaRegistro" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="USU_Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CatalogoTransparenciaReportes_MapeosReportes">
+          <End Role="MapeosReportes" Type="Self.MapeosReportes" Multiplicity="1" />
+          <End Role="CatalogoTransparenciaReportes" Type="Self.CatalogoTransparenciaReportes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MapeosReportes">
+              <PropertyRef Name="MR_MapeoId" />
+            </Principal>
+            <Dependent Role="CatalogoTransparenciaReportes">
+              <PropertyRef Name="CTR_MR_MapeoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CatologoTransparencia_ControlesMaestrosTiposRangos">
+          <End Role="ControlesMaestrosTiposRangos" Type="Self.ControlesMaestrosTiposRangos" Multiplicity="0..1" />
+          <End Role="CatalogoTransparencia" Type="Self.CatalogoTransparencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlesMaestrosTiposRangos">
+              <PropertyRef Name="CMTR_TipoRangoId" />
+            </Principal>
+            <Dependent Role="CatalogoTransparencia">
+              <PropertyRef Name="CT_CMTR_TipoRangoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MapeosReportes_CatalogoTransparencia">
+          <End Role="CatalogoTransparencia" Type="Self.CatalogoTransparencia" Multiplicity="1" />
+          <End Role="MapeosReportes" Type="Self.MapeosReportes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogoTransparencia">
+              <PropertyRef Name="CT_NodoId" />
+            </Principal>
+            <Dependent Role="MapeosReportes">
+              <PropertyRef Name="MR_CT_NodoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_ActualizaCatalogoTransparenciaReportes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="mapeoId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="nombreArchivo" Type="nvarchar" Mode="In" />
+          <Parameter Name="descripcionArchivo" Type="nvarchar" Mode="In" />
+          <Parameter Name="fechaInicio" Type="datetime" Mode="In" />
+          <Parameter Name="fechaFin" Type="datetime" Mode="In" />
+          <Parameter Name="visible" Type="bit" Mode="In" />
+          <Parameter Name="modificadoPor" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="sp_CreaCatalogoTransparenciaReportes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="mapeoId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="nombreArchivo" Type="nvarchar" Mode="In" />
+          <Parameter Name="descripcionArchivo" Type="nvarchar" Mode="In" />
+          <Parameter Name="fechaInicio" Type="datetime" Mode="In" />
+          <Parameter Name="fechaFin" Type="datetime" Mode="In" />
+          <Parameter Name="visible" Type="bit" Mode="In" />
+          <Parameter Name="subidoPor" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="verificaReistro" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="sp_EliminaNodoCatalogoTransparenciaReportes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nodoId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="modificadoPor" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <EntityContainer Name="TransparenciaModelStoreContainer">
+          <EntitySet Name="CatalogoTransparencia" EntityType="Self.CatalogoTransparencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CatalogoTransparenciaReportes" EntityType="Self.CatalogoTransparenciaReportes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ControlesMaestrosTiposRangos" EntityType="Self.ControlesMaestrosTiposRangos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MapeosReportes" EntityType="Self.MapeosReportes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CatalogoTransparenciaReportes_MapeosReportes" Association="Self.FK_CatalogoTransparenciaReportes_MapeosReportes">
+            <End Role="MapeosReportes" EntitySet="MapeosReportes" />
+            <End Role="CatalogoTransparenciaReportes" EntitySet="CatalogoTransparenciaReportes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CatologoTransparencia_ControlesMaestrosTiposRangos" Association="Self.FK_CatologoTransparencia_ControlesMaestrosTiposRangos">
+            <End Role="ControlesMaestrosTiposRangos" EntitySet="ControlesMaestrosTiposRangos" />
+            <End Role="CatalogoTransparencia" EntitySet="CatalogoTransparencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MapeosReportes_CatalogoTransparencia" Association="Self.FK_MapeosReportes_CatalogoTransparencia">
+            <End Role="CatalogoTransparencia" EntitySet="CatalogoTransparencia" />
+            <End Role="MapeosReportes" EntitySet="MapeosReportes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TransparenciaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CatalogoTransparencia">
+          <Key>
+            <PropertyRef Name="CT_NodoId" />
+          </Key>
+          <Property Name="CT_NodoId" Type="Guid" Nullable="false" />
+          <Property Name="CT_NodoPadreId" Type="Guid" />
+          <Property Name="CT_Descripcion" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CT_Texto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CT_CMTR_TipoRangoId" Type="Guid" />
+          <Property Name="CT_Rango" Type="Int32" />
+          <Property Name="CT_Activo" Type="Boolean" Nullable="false" />
+          <Property Name="CT_Orden" Type="Int32" Nullable="false" />
+          <Property Name="CT_FechaUltimaModifacion" Type="DateTime" Precision="7" />
+          <Property Name="CT_USU_ModificaPorId" Type="Guid" />
+          <Property Name="CT_Timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="ControlesMaestrosTiposRangos" Relationship="Self.FK_CatologoTransparencia_ControlesMaestrosTiposRangos" FromRole="CatalogoTransparencia" ToRole="ControlesMaestrosTiposRangos" />
+          <NavigationProperty Name="MapeosReportes" Relationship="Self.FK_MapeosReportes_CatalogoTransparencia" FromRole="CatalogoTransparencia" ToRole="MapeosReportes" />
+        </EntityType>
+        <EntityType Name="CatalogoTransparenciaReportes">
+          <Key>
+            <PropertyRef Name="CTR_ReporteId" />
+          </Key>
+          <Property Name="CTR_ReporteId" Type="Guid" Nullable="false" />
+          <Property Name="CTR_MR_MapeoId" Type="Guid" Nullable="false" />
+          <Property Name="CTR_NombreArchivo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CTR_DescripcionArchivo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CTR_FechaInicio" Type="DateTime" Precision="7" />
+          <Property Name="CTR_FechaFin" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CTR_Visible" Type="Boolean" Nullable="false" />
+          <Property Name="CTR_Borrado" Type="Boolean" Nullable="false" />
+          <Property Name="CTR_FechaRegistro" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CTR_USU_SubidoPorId" Type="Guid" Nullable="false" />
+          <Property Name="CTR_FechaUltimaModificacion" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CTR_USU_ModificadoPorId" Type="Guid" Nullable="false" />
+          <Property Name="CTR_Timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="MapeosReportes" Relationship="Self.FK_CatalogoTransparenciaReportes_MapeosReportes" FromRole="CatalogoTransparenciaReportes" ToRole="MapeosReportes" />
+        </EntityType>
+        <EntityType Name="ControlesMaestrosTiposRangos">
+          <Key>
+            <PropertyRef Name="CMTR_TipoRangoId" />
+          </Key>
+          <Property Name="CMTR_TipoRangoId" Type="Guid" Nullable="false" />
+          <Property Name="CMTR_TipoRango" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CMTR_Timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="CatalogoTransparencia" Relationship="Self.FK_CatologoTransparencia_ControlesMaestrosTiposRangos" FromRole="ControlesMaestrosTiposRangos" ToRole="CatalogoTransparencia" />
+        </EntityType>
+        <EntityType Name="MapeosReportes">
+          <Key>
+            <PropertyRef Name="MR_MapeoId" />
+          </Key>
+          <Property Name="MR_MapeoId" Type="Guid" Nullable="false" />
+          <Property Name="MR_RutaFisicaReporte" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MR_CT_NodoId" Type="Guid" Nullable="false" />
+          <Property Name="MR_Acronimo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MR_Timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="CatalogoTransparencia" Relationship="Self.FK_MapeosReportes_CatalogoTransparencia" FromRole="MapeosReportes" ToRole="CatalogoTransparencia" />
+          <NavigationProperty Name="CatalogoTransparenciaReportes" Relationship="Self.FK_CatalogoTransparenciaReportes_MapeosReportes" FromRole="MapeosReportes" ToRole="CatalogoTransparenciaReportes" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="USU_UsuarioId" />
+          </Key>
+          <Property Name="USU_UsuarioId" Type="Guid" Nullable="false" />
+          <Property Name="USU_NombreUsuario" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="USU_CorreoElectronico" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="USU_Contrasenia" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="USU_Activo" Type="Boolean" Nullable="false" />
+          <Property Name="USU_RegistradoPor" Type="Guid" Nullable="false" />
+          <Property Name="USU_FechaRegistro" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="USU_Timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Association Name="FK_CatologoTransparencia_ControlesMaestrosTiposRangos">
+          <End Role="ControlesMaestrosTiposRangos" Type="Self.ControlesMaestrosTiposRangos" Multiplicity="0..1" />
+          <End Role="CatalogoTransparencia" Type="Self.CatalogoTransparencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ControlesMaestrosTiposRangos">
+              <PropertyRef Name="CMTR_TipoRangoId" />
+            </Principal>
+            <Dependent Role="CatalogoTransparencia">
+              <PropertyRef Name="CT_CMTR_TipoRangoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MapeosReportes_CatalogoTransparencia">
+          <End Role="CatalogoTransparencia" Type="Self.CatalogoTransparencia" Multiplicity="1" />
+          <End Role="MapeosReportes" Type="Self.MapeosReportes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CatalogoTransparencia">
+              <PropertyRef Name="CT_NodoId" />
+            </Principal>
+            <Dependent Role="MapeosReportes">
+              <PropertyRef Name="MR_CT_NodoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CatalogoTransparenciaReportes_MapeosReportes">
+          <End Role="MapeosReportes" Type="Self.MapeosReportes" Multiplicity="1" />
+          <End Role="CatalogoTransparenciaReportes" Type="Self.CatalogoTransparenciaReportes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MapeosReportes">
+              <PropertyRef Name="MR_MapeoId" />
+            </Principal>
+            <Dependent Role="CatalogoTransparenciaReportes">
+              <PropertyRef Name="CTR_MR_MapeoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TransparenciaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CatalogoTransparencia" EntityType="Self.CatalogoTransparencia" />
+          <EntitySet Name="CatalogoTransparenciaReportes" EntityType="Self.CatalogoTransparenciaReportes" />
+          <EntitySet Name="ControlesMaestrosTiposRangos" EntityType="Self.ControlesMaestrosTiposRangos" />
+          <EntitySet Name="MapeosReportes" EntityType="Self.MapeosReportes" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <AssociationSet Name="FK_CatologoTransparencia_ControlesMaestrosTiposRangos" Association="Self.FK_CatologoTransparencia_ControlesMaestrosTiposRangos">
+            <End Role="ControlesMaestrosTiposRangos" EntitySet="ControlesMaestrosTiposRangos" />
+            <End Role="CatalogoTransparencia" EntitySet="CatalogoTransparencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MapeosReportes_CatalogoTransparencia" Association="Self.FK_MapeosReportes_CatalogoTransparencia">
+            <End Role="CatalogoTransparencia" EntitySet="CatalogoTransparencia" />
+            <End Role="MapeosReportes" EntitySet="MapeosReportes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CatalogoTransparenciaReportes_MapeosReportes" Association="Self.FK_CatalogoTransparenciaReportes_MapeosReportes">
+            <End Role="MapeosReportes" EntitySet="MapeosReportes" />
+            <End Role="CatalogoTransparenciaReportes" EntitySet="CatalogoTransparenciaReportes" />
+          </AssociationSet>
+          <FunctionImport Name="sp_ActualizaCatalogoTransparenciaReportes">
+            <Parameter Name="id" Mode="In" Type="Guid" />
+            <Parameter Name="mapeoId" Mode="In" Type="Guid" />
+            <Parameter Name="nombreArchivo" Mode="In" Type="String" />
+            <Parameter Name="descripcionArchivo" Mode="In" Type="String" />
+            <Parameter Name="fechaInicio" Mode="In" Type="DateTime" />
+            <Parameter Name="fechaFin" Mode="In" Type="DateTime" />
+            <Parameter Name="visible" Mode="In" Type="Boolean" />
+            <Parameter Name="modificadoPor" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CreaCatalogoTransparenciaReportes" ReturnType="Collection(Guid)">
+            <Parameter Name="mapeoId" Mode="In" Type="Guid" />
+            <Parameter Name="nombreArchivo" Mode="In" Type="String" />
+            <Parameter Name="descripcionArchivo" Mode="In" Type="String" />
+            <Parameter Name="fechaInicio" Mode="In" Type="DateTime" />
+            <Parameter Name="fechaFin" Mode="In" Type="DateTime" />
+            <Parameter Name="visible" Mode="In" Type="Boolean" />
+            <Parameter Name="subidoPor" Mode="In" Type="Guid" />
+            <Parameter Name="verificaReistro" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sp_EliminaNodoCatalogoTransparenciaReportes">
+            <Parameter Name="nodoId" Mode="In" Type="Guid" />
+            <Parameter Name="modificadoPor" Mode="In" Type="Guid" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TransparenciaModelStoreContainer" CdmEntityContainer="TransparenciaEntities">
+          <EntitySetMapping Name="CatalogoTransparencia">
+            <EntityTypeMapping TypeName="TransparenciaModel.CatalogoTransparencia">
+              <MappingFragment StoreEntitySet="CatalogoTransparencia">
+                <ScalarProperty Name="CT_NodoId" ColumnName="CT_NodoId" />
+                <ScalarProperty Name="CT_NodoPadreId" ColumnName="CT_NodoPadreId" />
+                <ScalarProperty Name="CT_Descripcion" ColumnName="CT_Descripcion" />
+                <ScalarProperty Name="CT_Texto" ColumnName="CT_Texto" />
+                <ScalarProperty Name="CT_CMTR_TipoRangoId" ColumnName="CT_CMTR_TipoRangoId" />
+                <ScalarProperty Name="CT_Rango" ColumnName="CT_Rango" />
+                <ScalarProperty Name="CT_Activo" ColumnName="CT_Activo" />
+                <ScalarProperty Name="CT_Orden" ColumnName="CT_Orden" />
+                <ScalarProperty Name="CT_FechaUltimaModifacion" ColumnName="CT_FechaUltimaModifacion" />
+                <ScalarProperty Name="CT_USU_ModificaPorId" ColumnName="CT_USU_ModificaPorId" />
+                <ScalarProperty Name="CT_Timestamp" ColumnName="CT_Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CatalogoTransparenciaReportes">
+            <EntityTypeMapping TypeName="TransparenciaModel.CatalogoTransparenciaReportes">
+              <MappingFragment StoreEntitySet="CatalogoTransparenciaReportes">
+                <ScalarProperty Name="CTR_ReporteId" ColumnName="CTR_ReporteId" />
+                <ScalarProperty Name="CTR_MR_MapeoId" ColumnName="CTR_MR_MapeoId" />
+                <ScalarProperty Name="CTR_NombreArchivo" ColumnName="CTR_NombreArchivo" />
+                <ScalarProperty Name="CTR_DescripcionArchivo" ColumnName="CTR_DescripcionArchivo" />
+                <ScalarProperty Name="CTR_FechaInicio" ColumnName="CTR_FechaInicio" />
+                <ScalarProperty Name="CTR_FechaFin" ColumnName="CTR_FechaFin" />
+                <ScalarProperty Name="CTR_Visible" ColumnName="CTR_Visible" />
+                <ScalarProperty Name="CTR_Borrado" ColumnName="CTR_Borrado" />
+                <ScalarProperty Name="CTR_FechaRegistro" ColumnName="CTR_FechaRegistro" />
+                <ScalarProperty Name="CTR_USU_SubidoPorId" ColumnName="CTR_USU_SubidoPorId" />
+                <ScalarProperty Name="CTR_FechaUltimaModificacion" ColumnName="CTR_FechaUltimaModificacion" />
+                <ScalarProperty Name="CTR_USU_ModificadoPorId" ColumnName="CTR_USU_ModificadoPorId" />
+                <ScalarProperty Name="CTR_Timestamp" ColumnName="CTR_Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ControlesMaestrosTiposRangos">
+            <EntityTypeMapping TypeName="TransparenciaModel.ControlesMaestrosTiposRangos">
+              <MappingFragment StoreEntitySet="ControlesMaestrosTiposRangos">
+                <ScalarProperty Name="CMTR_TipoRangoId" ColumnName="CMTR_TipoRangoId" />
+                <ScalarProperty Name="CMTR_TipoRango" ColumnName="CMTR_TipoRango" />
+                <ScalarProperty Name="CMTR_Timestamp" ColumnName="CMTR_Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MapeosReportes">
+            <EntityTypeMapping TypeName="TransparenciaModel.MapeosReportes">
+              <MappingFragment StoreEntitySet="MapeosReportes">
+                <ScalarProperty Name="MR_MapeoId" ColumnName="MR_MapeoId" />
+                <ScalarProperty Name="MR_RutaFisicaReporte" ColumnName="MR_RutaFisicaReporte" />
+                <ScalarProperty Name="MR_CT_NodoId" ColumnName="MR_CT_NodoId" />
+                <ScalarProperty Name="MR_Acronimo" ColumnName="MR_Acronimo" />
+                <ScalarProperty Name="MR_Timestamp" ColumnName="MR_Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="TransparenciaModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="USU_UsuarioId" ColumnName="USU_UsuarioId" />
+                <ScalarProperty Name="USU_NombreUsuario" ColumnName="USU_NombreUsuario" />
+                <ScalarProperty Name="USU_CorreoElectronico" ColumnName="USU_CorreoElectronico" />
+                <ScalarProperty Name="USU_Contrasenia" ColumnName="USU_Contrasenia" />
+                <ScalarProperty Name="USU_Activo" ColumnName="USU_Activo" />
+                <ScalarProperty Name="USU_RegistradoPor" ColumnName="USU_RegistradoPor" />
+                <ScalarProperty Name="USU_FechaRegistro" ColumnName="USU_FechaRegistro" />
+                <ScalarProperty Name="USU_Timestamp" ColumnName="USU_Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_ActualizaCatalogoTransparenciaReportes" FunctionName="TransparenciaModel.Store.sp_ActualizaCatalogoTransparenciaReportes" />
+          <FunctionImportMapping FunctionImportName="sp_CreaCatalogoTransparenciaReportes" FunctionName="TransparenciaModel.Store.sp_CreaCatalogoTransparenciaReportes" />
+          <FunctionImportMapping FunctionImportName="sp_EliminaNodoCatalogoTransparenciaReportes" FunctionName="TransparenciaModel.Store.sp_EliminaNodoCatalogoTransparenciaReportes" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
